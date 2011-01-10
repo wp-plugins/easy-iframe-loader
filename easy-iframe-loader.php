@@ -124,7 +124,7 @@ class iframeLoader {
         function youtube_iframe_loader($atts){
              $options =get_option("iframeLoaderAdminOptions");
                extract(shortcode_atts(array(
-                    'height' => $options['youtube_height'],'width' => $options['basic_width'],'frameborder' => '0','scrolling'=>'no', 'src'=>'',
+                    'height' => $options['youtube_height'],'width' => $options['youtube_width'],'frameborder' => '0','scrolling'=>'no', 'src'=>'',
                     'longdesc'=>'','marginheight'=>'0','marginwidth'=>'0', 'name'=>'','click_words'=>'','click_url'=>'','video'=>''
                ), $atts));
                 $args = array('height' => $height,'width' => $width,'frameborder' => $frameborder,
