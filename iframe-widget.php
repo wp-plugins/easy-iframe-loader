@@ -52,9 +52,10 @@ class iFrame_Widget  extends WP_Widget {
     function form( $instance ) {
 
             /* Set up some default widget settings. */
+           $options = get_option("iframeLoaderAdminOptions");
            $defaults = array(
                'title'=>'',
-               'height' => "150",'width' => "100%",'frameborder' => '0','scrolling'=>'auto', 'src'=>'',
+               'height' => $options['widget_height'],'width' => $options['widget_width'],'frameborder' => '0','scrolling'=>'no', 'src'=>'',
                 'longdesc'=>'','marginheight'=>'0','marginwidth'=>'0', 'name'=>'','click_words'=>'','click_url'=>''
            );
             $instance = wp_parse_args( (array) $instance, $defaults ); ?>
@@ -91,32 +92,32 @@ class iFrame_Widget  extends WP_Widget {
             </p>
 
             <p>
-                    <label for="<?php echo $this->get_field_id( 'marginwidth' ); ?>"><?php _e('iFrame marginwidth:','iframeLoader'); ?></label>
+                    <label for="<?php echo $this->get_field_id( 'marginwidth' ); ?>"><?php _e('iFrame marginwidth:','iframeLoader'); ?></label><br />
                     <input type="text" id="<?php echo $this->get_field_id( 'marginwidth' ); ?>" name="<?php echo $this->get_field_name( 'marginwidth' ); ?>" value="<?php echo $instance['marginwidth']; ?>" style="marginwidth:90%" />
             </p>
 
             <p>
-                    <label for="<?php echo $this->get_field_id( 'marginheight' ); ?>"><?php _e('iFrame marginheight:','iframeLoader'); ?></label>
+                    <label for="<?php echo $this->get_field_id( 'marginheight' ); ?>"><?php _e('iFrame marginheight:','iframeLoader'); ?></label><br />
                     <input type="text" id="<?php echo $this->get_field_id( 'marginheight' ); ?>" name="<?php echo $this->get_field_name( 'marginheight' ); ?>" value="<?php echo $instance['marginheight']; ?>" style="marginheight:90%" />
             </p>
 
             <p>
-                    <label for="<?php echo $this->get_field_id( 'name' ); ?>"><?php _e('iFrame name:','iframeLoader'); ?></label>
+                    <label for="<?php echo $this->get_field_id( 'name' ); ?>"><?php _e('iFrame name:','iframeLoader'); ?></label><br />
                     <input type="text" id="<?php echo $this->get_field_id( 'name' ); ?>" name="<?php echo $this->get_field_name( 'name' ); ?>" value="<?php echo $instance['name']; ?>" style="name:90%" />
             </p>
 
             <p>
-                    <label for="<?php echo $this->get_field_id( 'longdesc' ); ?>"><?php _e('iFrame longdesc:','iframeLoader'); ?></label>
+                    <label for="<?php echo $this->get_field_id( 'longdesc' ); ?>"><?php _e('iFrame longdesc:','iframeLoader'); ?></label><br />
                     <input type="text" id="<?php echo $this->get_field_id( 'longdesc' ); ?>" name="<?php echo $this->get_field_name( 'longdesc' ); ?>" value="<?php echo $instance['longdesc']; ?>" style="longdesc:90%" />
             </p>
 
             <p>
-                    <label for="<?php echo $this->get_field_id( 'click_words' ); ?>"><?php _e('iFrame click_words:','iframeLoader'); ?></label>
+                    <label for="<?php echo $this->get_field_id( 'click_words' ); ?>"><?php _e('iFrame click_words:','iframeLoader'); ?></label><br />
                     <input type="text" id="<?php echo $this->get_field_id( 'click_words' ); ?>" name="<?php echo $this->get_field_name( 'click_words' ); ?>" value="<?php echo $instance['click_words']; ?>" style="click_words:90%" />
             </p>
 
             <p>
-                    <label for="<?php echo $this->get_field_id( 'click_url' ); ?>"><?php _e('iFrame click_url:','iframeLoader'); ?></label>
+                    <label for="<?php echo $this->get_field_id( 'click_url' ); ?>"><?php _e('iFrame click_url:','iframeLoader'); ?></label><br />
                     <input type="text" id="<?php echo $this->get_field_id( 'click_url' ); ?>" name="<?php echo $this->get_field_name( 'click_url' ); ?>" value="<?php echo $instance['click_url']; ?>" style="click_url:90%" />
             </p>
 
