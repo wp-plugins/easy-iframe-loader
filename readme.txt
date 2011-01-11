@@ -119,8 +119,8 @@ Just needs the alpha-numeric video id only, optional click URL and click words. 
 
 == Screenshots ==
 
-1. the basic admin screen to enable standard settings of the various shortcodes
-2. Vimeo and YouTube videos working on an iPad
+1. the basic admin screen to enable standard settings of the various shortcodes.
+2. Vimeo and YouTube videos working on an iPad.
 
 == Changelog ==
 
