@@ -2,7 +2,7 @@
 /* 
 Plugin Name: Easy iFrame Loader
 Plugin URI: http://phat-reaction.com/wordpress-plugins/easy-iframe-loader
-Version: 1.1
+Version: 1.2
 Author: Andy Killen
 Author URI: http://phat-reaction.com
 Description: Simple plugin to handle iframe late loading from a shortcode, template tag or widget
@@ -36,13 +36,22 @@ class iframeLoader {
                 $this->getAdminOptions();
         }
 
-        function getAdminOptions() {
-                $iframeAdminOptions = array(
+        function activate() {
+                $this->getAdminOptions();
+        }
+
+        function iframe_defaults(){
+             $iframeAdminOptions = array(
                     'youtube_height'=>'345', 'youtube_width'=>'560',
                     'vimeo_height'=>'315', 'vimeo_width'=>'560',
                     'amazon_width'=>'90%','amazon_height'=>'4000',
                     'basic_height'=>'250', 'basic_width'=>'100%',
                     'widget_height'=>'250', 'widget_width'=>'100%',);
+             return $iframeAdminOptions;
+        }
+
+        function getAdminOptions() {
+               $iframeAdminOptions = iframeLoader::iframe_defaults();
                 $devOptions = get_option("iframeLoaderAdminOptions");
                 if (!empty($devOptions)) {
                         foreach ($devOptions as $key => $option)
@@ -64,8 +73,8 @@ class iframeLoader {
                 'longdesc'=>'','marginheight'=>'0','marginwidth'=>'0', 'name'=>'','click_words'=>'','click_url'=>'', 'class'=>'', 'title'=>'','youtube'=>'','vimeo'=>'');
                 $args = wp_parse_args( $args, $defaults );
                 extract( $args, EXTR_SKIP );
-                $html = "<script  type=\"text/javascript\"> \n";
-                $html .="//<![CDATA[  \n";
+                $html = "<script type='text/javascript'>  \n";
+              //  $html .= "//<![CDATA[ \n";
                 $html .="window.onload = document.write(\"";
                 $html .="<iframe width='".$width."' height='".$height."' marginwidth='".$marginwidth."' marginheight='".$marginheight."' scrolling='".$scrolling."' frameborder='".$frameborder."' ";
                  if (!empty ($name)){ $html .= " name='".$name."' ";}
@@ -73,11 +82,12 @@ class iframeLoader {
                  if (!empty ($class)){ $html .= " class='".$class."' ";}
                  if (!empty ($title)){ $html .= " title='".$title."' ";}
                  if (!empty ($src)){ $html .= " src='".$src."' ";}
-                 if (!empty ($youtube)){ $html .= " src='http://www.youtube.com/embed/".$youtube."?rel=0' ";iframeLoader::youtube_share_image();}
-                 if (!empty ($vimeo)){ $html .= " src='http://player.vimeo.com/video/".$vimeo."' ";iframeLoader::vimeo_share_image();}
-                 $html .= "></iframe> \") \n ";
-                 if (!empty($click_words) && !empty($click_url)){$html .="window.onload = document.write(\"<br /><a href='".$click_url."'>".$click_words."</a><br/>\")";}
-                 $html .= " //]]> \n</script>";
+                 if (!empty ($youtube)){ $html .= " src='http://www.youtube.com/embed/".$youtube."?rel=0' ";}
+                 if (!empty ($vimeo)){ $html .= " src='http://player.vimeo.com/video/".$vimeo."' ";}
+                 $html .= "></iframe> \"); \n ";
+                 if (!empty($click_words) && !empty($click_url)){$html .="window.onload = document.write(\"<br /><a href='".$click_url."'>".$click_words."</a><br/>\"); \n";}
+               //  $html .= "//]]> \n";
+                 $html .= "</script>";
                  return $html;
         }
 
@@ -131,20 +141,20 @@ class iframeLoader {
                     'longdesc'=>$longdesc,'marginheight'=>$marginheight,'marginwidth'=>$marginwidth, 'name'=>$name,'click_words'=>$click_words,'click_url'=>$click_url,
                     'scrolling'=>$scrolling, 'src'=>$src, 'youtube'=>$video);
                 $html = iframeLoader::do_iframe_script($args);
-                iframeLoader::youtube_share_image();
+
+                $image_src = get_post_meta(get_the_ID(), 'image_src', true);
+                if (empty($image_src)){
+                 if (!empty($video)){
+                    $url = "http://img.youtube.com/vi/".$video."/0.jpg";
+                    add_post_meta(get_the_ID(), 'image_src', $url, true);
+                 }
+            }
                 
                 return $html;
         }
 
-        function youtube_share_image(){
-            $image_src = get_post_meta(get_the_ID(), 'image_src', true);
-                if (empty($image_src)){
-                 if (!empty($youtube)){
-                    $image = $youtube;
-                    $url = "http://img.youtube.com/vi/".$image."/0.jpg";
-                    add_post_meta(get_the_ID(), 'image_src', $url, true);
-                 }
-            }
+        function youtube_share_image($page_ID){
+            
         }
 
 
@@ -158,20 +168,19 @@ class iframeLoader {
                     'longdesc'=>$longdesc,'marginheight'=>$marginheight,'marginwidth'=>$marginwidth, 'name'=>$name,'click_words'=>$click_words,'click_url'=>$click_url,
                     'scrolling'=>$scrolling, 'src'=>$src, 'vimeo'=>$video);
                 $html = iframeLoader::do_iframe_script($args);
-                iframeLoader::vimeo_share_image();
-                return $html;
-        }
-
-        function vimeo_share_image(){
-            $image_src = get_post_meta(get_the_ID(), 'image_src', true);
+                $image_src = get_post_meta(get_the_ID(), 'image_src', true);
                 if (empty($image_src)){
-                 if (!empty($vimeo)){
-                    $imgid = $vimeo;
-                    $hash = unserialize(file_get_contents("http://vimeo.com/api/v2/video/".$imgid.".php"));
+                 if (!empty($video)){
+                    $hash = unserialize(file_get_contents("http://vimeo.com/api/v2/video/".$video.".php"));
                     $url = $hash[0][thumbnail_large];
                     add_post_meta(get_the_ID(), 'image_src', $url, true);
                  }
             }
+                return $html;
+        }
+
+        function vimeo_share_image($page_ID, $vimeo){
+           
         }
 
         function printAdminPage() {
@@ -206,6 +215,7 @@ add_shortcode('iframe_youtube', array(&$cons_iframeLoader,'youtube_iframe_loader
 
 add_shortcode('iframe_vimeo', array(&$cons_iframeLoader,'vimeo_iframe_loader'),1); // setup shortcode [iframe_youtube] youtube videos
 
+register_activation_hook( __FILE__, array(&$cons_shareFollow, 'activate') );
 //Initialize the admin panel
         if (!function_exists("iframeLoader_ap")) {
 	function iframeloader_ap() {
