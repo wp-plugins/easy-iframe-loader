@@ -6,7 +6,7 @@ Requires at least: 2.8.6
 Tested up to: 3.1
 Stable tag: 1.2
 
-Adds a shortcode/widget/template tag to manage iFrame loading, uses javascript for late loading to increase page speed.
+Adds a shortcode/widget/template tag to manage iFrame loading, uses javascript for late loading to increase page speed. Additional iframes support for Youtube, Vimeo and Amazon.
 
 == Description ==
 
