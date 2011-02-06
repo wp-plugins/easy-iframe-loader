@@ -4,7 +4,7 @@ Donate link: http://phat-reaction.com/wordpress-plugins/easy-iframe-loader/donat
 Tags: iframe, javascript, late load, shortcode, widget, template, tag, speed, page, post, youtube, vimeo, amazon, ipad, iphone, ipod
 Requires at least: 2.8.6
 Tested up to: 3.1
-Stable tag: 1.2
+Stable tag: 1.3
 
 Adds a shortcode/widget/template tag to manage iFrame loading, uses javascript for late loading to increase page speed. Additional iframes support for Youtube, Vimeo and Amazon.
 
@@ -54,7 +54,7 @@ It is possible to setup default for the shortcodes in the admin screen (Settings
 = iframe_loader... the default iframe technique  =
 The default settings are
 
-`[iframe_loader width='100%' height='150'  frameborder = '0'  longdesc=' ' marginheight='0'  marginwidth='0' name=' ' click_words=' ' click_url=' '  scrolling='auto'   src=' ']`
+`[iframe_loader width='100%' height='150'  frameborder = '0'  longdesc=' ' marginheight='0'  marginwidth='0' name=' ' click_words=' ' click_url=' '  scrolling='auto'   src=' ' class=' ' ]`
 
 = Can I have an example of it loading a vimeo video? =
 
@@ -105,16 +105,16 @@ All options
             'longdesc'=>'','marginheight'=>'0','marginwidth'=>'0', 'name'=>'','click_words'=>'','click_url'=>'');`
 
 
-= add_iframe_a_store($src, $width='', $height='') =
+= add_iframe_a_store($src, $width='', $height='', $class='') =
 If no height or width is set it will default back to the ones in the admin page. $src is vital!
 
-= add_iframe_amazon_buy($src) =
+= add_iframe_amazon_buy($src, $class='') =
 needs the $src of the iframe only, height and width never change
 
-= add_iframe_youtube($video, $click_words='', $click_url='') =
+= add_iframe_youtube($video, $click_words='', $click_url='', $class='') =
 Just needs the alpha-numeric video id only, optional click URL and click words.  Height and Width are from admin page.  If you want different settings use the add_iframe_late_load($args)
 
-= add_iframe_vimeo($video, $click_words='', $click_url='') =
+= add_iframe_vimeo($video, $click_words='', $click_url='', $class='') =
    Just needs the numeric video id only, optional click URL and click words.  Height and Width are from admin page.  If you want different settings use the add_iframe_late_load($args)
 
 == Screenshots ==
@@ -123,6 +123,10 @@ Just needs the alpha-numeric video id only, optional click URL and click words. 
 2. Vimeo and YouTube videos working on an iPad.
 
 == Changelog ==
+
+= 1.3 =
+
+added a 'class' option to the plugin so that iframe styling can be controlled via CSS
 
 = 1.2 =
 
@@ -135,6 +139,9 @@ more shortcodes, better OSX support
 First version
 
 == Upgrade Notice ==
+= 1.3 =
+
+added a 'class' option to the plugin so that iframe styling can be controlled via CSS
 
 = 1.2 =
 
