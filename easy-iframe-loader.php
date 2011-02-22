@@ -2,7 +2,7 @@
 /* 
 Plugin Name: Easy iFrame Loader
 Plugin URI: http://phat-reaction.com/wordpress-plugins/easy-iframe-loader
-Version: 1.3
+Version: 1.3.1
 Author: Andy Killen
 Author URI: http://phat-reaction.com
 Description: Simple plugin to handle iframe late loading from a shortcode, template tag or widget
@@ -92,7 +92,6 @@ class iframeLoader {
                  return $html;
         }
 
-
         function late_iframe_loader($atts){
                $options = get_option("iframeLoaderAdminOptions");
                extract(shortcode_atts(array(
@@ -105,8 +104,6 @@ class iframeLoader {
                 $html = iframeLoader::do_iframe_script($args);
                 return $html;
         }
-
-
 
         function a_store_loader($atts){
             $options =get_option("iframeLoaderAdminOptions");
@@ -153,11 +150,9 @@ class iframeLoader {
                 
                 return $html;
         }
-
         function youtube_share_image($page_ID){
             
         }
-
 
         function vimeo_iframe_loader($atts){
              $options =get_option("iframeLoaderAdminOptions");
@@ -216,26 +211,14 @@ if (isset($cons_iframeLoader)) {
 }
 
 add_action('admin_menu', 'iframeLoader_ap',1); //admin page
-
 add_action('widgets_init',array(&$cons_iframeLoader, 'load_widgets'),1); // loads widgets
-
 add_action ('init',array(&$cons_iframeLoader, 'loadLangauge'),1);  // add languages
-// save custom user fields
 add_shortcode('iframe_loader', array(&$cons_iframeLoader,'late_iframe_loader'),1); // setup shortcode [iframe_loader] basic
-
 add_shortcode('a_store', array(&$cons_iframeLoader,'a_store_loader'),1); // setup shortcode [a_store] amazon store
-
 add_shortcode('amazon_buy', array(&$cons_iframeLoader,'amazon_buy_loader'),1); // setup shortcode [amazon_buy] amazon buy button with image
-
 add_shortcode('iframe_youtube', array(&$cons_iframeLoader,'youtube_iframe_loader'),1); // setup shortcode [iframe_youtube] youtube videos
-
 add_shortcode('iframe_vimeo', array(&$cons_iframeLoader,'vimeo_iframe_loader'),1); // setup shortcode [iframe_youtube] youtube videos
-
 register_activation_hook( __FILE__, array(&$cons_iframeLoader, 'activate') );
-
-
-
-
 }
 //
 // tempate tags
@@ -255,7 +238,7 @@ function add_iframe_a_store($src, $width='', $height='', $class=''){
    echo iframeLoader::do_iframe_script($args);
 }
 //
-// at an amazon by now iframe
+// add an amazon by now iframe
 //
 function add_iframe_amazon_buy($src, $class=''){
    $args = array('src'=>$src,'width'=>'120','height'=>'240', $class='');

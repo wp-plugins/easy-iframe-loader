@@ -4,7 +4,7 @@ Donate link: http://phat-reaction.com/wordpress-plugins/easy-iframe-loader/donat
 Tags: iframe, javascript, late load, shortcode, widget, template, tag, speed, page, post, youtube, vimeo, amazon, ipad, iphone, ipod
 Requires at least: 2.8.6
 Tested up to: 3.1
-Stable tag: 1.3
+Stable tag: 1.3.1
 
 Adds a shortcode/widget/template tag to manage iFrame loading, uses javascript for late loading to increase page speed. Additional iframes support for Youtube, Vimeo and Amazon.
 
@@ -123,6 +123,9 @@ Just needs the alpha-numeric video id only, optional click URL and click words. 
 2. Vimeo and YouTube videos working on an iPad.
 
 == Changelog ==
+= 1.3.1 =
+
+changed activation class call which got lost by SVN
 
 = 1.3 =
 
@@ -139,6 +142,11 @@ more shortcodes, better OSX support
 First version
 
 == Upgrade Notice ==
+
+= 1.3.1 =
+
+changed activation class call which got lost by SVN
+
 = 1.3 =
 
 added a 'class' option to the plugin so that iframe styling can be controlled via CSS
