@@ -2,7 +2,7 @@
 /* 
 Plugin Name: Easy iFrame Loader
 Plugin URI: http://phat-reaction.com/wordpress-plugins/easy-iframe-loader
-Version: 1.3.1
+Version: 1.4.0
 Author: Andy Killen
 Author URI: http://phat-reaction.com
 Description: Simple plugin to handle iframe late loading from a shortcode, template tag or widget
@@ -40,6 +40,18 @@ class iframeLoader {
                 $this->getAdminOptions();
         }
 
+         public function iframe_cache_manager($option_name = iframeLoader::adminOptionsName){
+                    $value = get_transient( $option_name  );
+                    if(false === $value){
+                        $value = get_option( $option_name );
+
+                        set_transient( $option_name, $value, 60*60*24 );
+                    }
+
+                return $value;
+            }
+
+
         function iframe_defaults(){
              $iframeAdminOptions = array(
                     'youtube_height'=>'345', 'youtube_width'=>'560',
@@ -51,7 +63,7 @@ class iframeLoader {
         }
 
         function getAdminOptions() {
-               $iframeAdminOptions = iframeLoader::iframe_defaults();
+               $iframeAdminOptions = $this->iframe_defaults();
                 $devOptions = get_option("iframeLoaderAdminOptions");
                 if (!empty($devOptions)) {
                         foreach ($devOptions as $key => $option)
@@ -101,7 +113,7 @@ class iframeLoader {
                 $args = array('height' => $height,'width' => $width,'frameborder' => $frameborder,
                     'longdesc'=>$longdesc,'marginheight'=>$marginheight,'marginwidth'=>$marginwidth, 'name'=>$name,'click_words'=>$click_words,'click_url'=>$click_url,
                     'scrolling'=>$scrolling, 'src'=>$src, 'class'=>$class);
-                $html = iframeLoader::do_iframe_script($args);
+                $html = $this->do_iframe_script($args);
                 return $html;
         }
 
@@ -114,7 +126,7 @@ class iframeLoader {
                 $args = array('height' => $height,'width' => $width,'frameborder' => $frameborder,
                     'longdesc'=>$longdesc,'marginheight'=>$marginheight,'marginwidth'=>$marginwidth, 'name'=>$name,'click_words'=>$click_words,'click_url'=>$click_url,
                     'scrolling'=>$scrolling, 'src'=>$src, 'class'=>$class);
-                $html = iframeLoader::do_iframe_script($args);
+                $html = $this->do_iframe_script($args);
                 return $html;
         }
 
@@ -125,7 +137,7 @@ class iframeLoader {
                 $args = array('height' => $height,'width' => $width,'frameborder' => $frameborder,
                     'longdesc'=>$longdesc,'marginheight'=>$marginheight,'marginwidth'=>$marginwidth, 'name'=>$name,'click_words'=>$click_words,'click_url'=>$click_url,
                     'scrolling'=>$scrolling, 'src'=>$src,'class'=>$class);
-                $html = iframeLoader::do_iframe_script($args);
+                $html = $this->do_iframe_script($args);
                 return $html;
         }
 
@@ -138,7 +150,7 @@ class iframeLoader {
                 $args = array('height' => $height,'width' => $width,'frameborder' => $frameborder,
                     'longdesc'=>$longdesc,'marginheight'=>$marginheight,'marginwidth'=>$marginwidth, 'name'=>$name,'click_words'=>$click_words,'click_url'=>$click_url,
                     'scrolling'=>$scrolling, 'src'=>$src, 'youtube'=>$video,'class'=>$class);
-                $html = iframeLoader::do_iframe_script($args);
+                $html = $this->do_iframe_script($args);
 
                 $image_src = get_post_meta(get_the_ID(), 'image_src', true);
                 if (empty($image_src)){
@@ -163,7 +175,7 @@ class iframeLoader {
                 $args = array('height' => $height,'width' => $width,'frameborder' => $frameborder,
                     'longdesc'=>$longdesc,'marginheight'=>$marginheight,'marginwidth'=>$marginwidth, 'name'=>$name,'click_words'=>$click_words,'click_url'=>$click_url,
                     'scrolling'=>$scrolling, 'src'=>$src, 'vimeo'=>$video,'class'=>$class);
-                $html = iframeLoader::do_iframe_script($args);
+                $html = $this->do_iframe_script($args);
                 $image_src = get_post_meta(get_the_ID(), 'image_src', true);
                 if (empty($image_src)){
                  if (!empty($video)){
@@ -225,39 +237,51 @@ register_activation_hook( __FILE__, array(&$cons_iframeLoader, 'activate') );
 //
 // LATE LOAD IFRAME BASIC
 function add_iframe_late_load($args){
-   echo iframeLoader::do_iframe_script($args);
+   $iframe = new iframeLoader();
+   echo $iframe->do_iframe_script($args);
 }
 //
 // Add an amazon store uses the admin settings but allows for overide
 //
 function add_iframe_a_store($src, $width='', $height='', $class=''){
-   $options = get_option("iframeLoaderAdminOptions");
+
+   $iframe = new iframeLoader();
+   $options = $iframe->iframe_cache_manager();
+   
    if(empty($width)){$width = $option['amazon_width'];}
    if(empty($height)){$width = $option['amazon_height'];}
    $args = array ('src'=>$src,'width'=>$width,'height'=>$height, 'class'=>$class);
-   echo iframeLoader::do_iframe_script($args);
+   
+   echo $iframe->do_iframe_script($args);
 }
 //
 // add an amazon by now iframe
 //
 function add_iframe_amazon_buy($src, $class=''){
    $args = array('src'=>$src,'width'=>'120','height'=>'240', $class='');
-   echo iframeLoader::do_iframe_script($args);
+
+   $iframe = new iframeLoader();
+
+   echo $iframe->do_iframe_script($args);
 }
 //
 // add a youtube video to a page using the admin settings
 //
 function add_iframe_youtube($video, $click_words='', $click_url='', $class=''){
-   $options = get_option("iframeLoaderAdminOptions");
+
+   $iframe = new iframeLoader();
+   $options = $iframe->iframe_cache_manager();
    $args = array('youtube'=>$video,'width'=>$options['youtube_width'],'height'=>$options['youtube_height'],'click_words'=>$click_words,'click_url'=>$click_url, 'class'=>$class );
-   echo iframeLoader::do_iframe_script($args);
+   
+   echo $iframe->do_iframe_script($args);
 }
 //
 // add a vimeo video to a page using the admin settings
 //
 function add_iframe_vimeo($video, $click_words='', $click_url='', $class=''){
-   $options = get_option("iframeLoaderAdminOptions");
+   $iframe = new iframeLoader();
+   $options = $iframe->iframe_cache_manager();
    $args = array('vimeo'=>$video,'width'=>$options['vimeo_width'],'height'=>$options['vimeo_height'],'click_words'=>$click_words,'click_url'=>$click_url, 'class'=>$class );
-   echo iframeLoader::do_iframe_script($args);
+   echo $iframe->do_iframe_script($args);
 }
 ?>
